@@ -4,7 +4,7 @@ import TableTab from "./tableView";
 
 function Main() {
 
-
+    
     return ( 
         <>
             <MainTab/>
