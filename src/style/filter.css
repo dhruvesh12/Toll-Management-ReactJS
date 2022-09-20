@@ -1,0 +1,158 @@
+.main { 
+    display: flex;
+    flex-wrap: wrap;
+ }
+
+.a{
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin-left: 10px;
+}
+
+.b { 
+    flex: 1; 
+    text-align: center;
+ }
+.c {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.c > button{
+    background-color: #367DF7;
+    color: aliceblue;
+    border-radius: 5px;
+    border: solid #367DF7;
+    margin-right: 30px;
+    height: 40px;
+}
+
+.c > button:hover{
+    color:  rgb(152, 217, 233);
+}
+
+.filterdropdown{
+  color : "red",
+}
+
+.dropdowncontainer{
+    position : absolute;
+    margin-top : 50px;
+    margin-left : 220px;
+    list-style-type: none;
+    border: 2px solid rgb(250, 248, 248);
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgb(133, 119, 119);
+    width: 100px;
+}
+
+.dropdowncontainer > li:hover {
+    background-color: #F5F5F5;
+}
+
+.dropdowncontainer > li {
+    font-size: large;
+}
+
+
+.customers {
+    margin-top: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .customers tr:nth-child(even){background-color: #f2f2f2;}
+  
+  .customers tr:hover {background-color: #ddd;}
+  
+  .customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #F3F4F7;
+    color: #9C9D9D;
+  }
+
+  
+
+
+  .container {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 99999;
+    opacity: 1;
+    
+    transition: opacity 400ms ease-in;
+    pointer-events: auto;
+  }
+  .container:target {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .container > div {
+    width: 700px;
+    height: 500px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 5px;
+    background: #FFFFFF;
+    text-align: left;
+    
+  }
+  .close {
+    /* background: #606061; */
+    color: #000000;
+    line-height: 25px;
+    position: absolute;
+    right: 12px;
+    text-align: center;
+    top: 10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    
+    border-radius: 12px;
+    
+  }
+  .close:hover {
+    background: #a193e0;
+  }
+
+  
+
+  .vehicleDropdown{
+    display: flex;
+    gap: 10%;
+    margin-bottom: 20px;
+    
+  }
+
+  .vehicleDropdown > input {
+    border-radius: 5px;
+  }
+
+
+  .vehicleDropdown > select{
+    width: 200px;
+    height: 40px;
+    text-align: center;
+    font-size: x-large;
+    border-radius: 5px;
+  }
+
+  
+
+  
