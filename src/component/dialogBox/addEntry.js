@@ -3,6 +3,7 @@ import "./../../style/filter.css"
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Main from "../main";
+import TableTab from "../tableView";
 
 function AddEntry() {
 
@@ -14,6 +15,7 @@ function AddEntry() {
     const [vehicleNo , setVehicleNo] = React.useState()
     const [tarif , settarif] = React.useState('')
    
+    const [vehiclevalidate , setvehiclevalidate] = React.useState(true)
     
     let getTollName = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
 
@@ -27,11 +29,26 @@ function AddEntry() {
 
     let vehicletoll={}
 
-    
+    console.log(toll==='')
 
     useMemo(()=>{
         let currentTime = new Date()
         let test = []
+
+        
+        //To validate Vehicle No.
+
+        var RegEx = /^[a-z0-9]+$/i;
+        var Valid = RegEx.test(vehicleNo);
+        setvehiclevalidate(Valid)
+
+        //console.log(vehiclevalidate)
+
+        if(Valid === false){
+            var result = String(vehicleNo).slice(0,-1);
+            setVehicleNo(result)
+            alert("Please Insert Alphanumeric")
+        }
         
         if(JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ))=== null){
             for(let item of getTollName){
@@ -166,7 +183,7 @@ function AddEntry() {
 
         //console.log(vehicletype)
 
-        if(vehicleNo === undefined || vehicletype === '' || toll === ''){
+        if(vehicleNo === undefined || vehicletype === '' || toll === '' || tarif === ''){
             alert("Please Enter All Field ")
         }else{
             var entrties = JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ) || " [ ] " )
@@ -174,10 +191,11 @@ function AddEntry() {
         
             entrties.push ( vehicleDetail )
             localStorage.setItem ( ' vehicleEntries ' , JSON.stringify ( entrties ) )
-    
+            //let prev = localStorage.setItem ( ' vehicleEntries ' , JSON.stringify ( entrties ) )
+            //setTimeout(window.location.reload(false),2000)
+            localStorage.setItem ( 'filteredItem' , JSON.stringify ( entrties ) )
             navigate('/')
-    
-            window.location.reload(false);
+            //window.location.reload(false);
         }
 
        
@@ -202,7 +220,7 @@ function AddEntry() {
                 }}>X</a> 
                 <h2 style={{
                     textAlign : "Center"
-                }}>Add New Toll</h2>
+                }}>Add Vehicle Entry</h2>
 
                 <div style={{
                     display: "block",
@@ -217,6 +235,14 @@ function AddEntry() {
                     
                     
                 }}>
+                    {toll === '' ? <h3 style={{
+                        display : "flex",
+                        position : "absolute",
+                        marginLeft : "-130px",
+                        marginTop : "90px",
+                        color : "red",
+                    }} >Not Selected</h3> : ''}
+
                     <h3>Select toll name</h3>
                     <select 
                     style={{
@@ -240,8 +266,16 @@ function AddEntry() {
                         })}
                     </select>
 
+                    {vehicletype === '' ? <h3 style={{
+                        display : "flex",
+                        position : "absolute",
+                        marginLeft : "-130px",
+                        marginTop : "90px",
+                        color : "red",
+                    }} >Not Selected</h3> : ''}
+
                     <h3>Select Vehicle type</h3>
-                    <select 
+                    <select
                     onClick={(e)=>{
                         setvehicletype(e.target.value)
                     }}
@@ -262,7 +296,7 @@ function AddEntry() {
                     </select>
 
                     <h3>Vehicle Number</h3>
-                    <input
+                    <input value={vehicleNo}
                     onChange={(e)=>{
                         setVehicleNo(e.target.value)
                     }}
@@ -311,6 +345,8 @@ function AddEntry() {
                  }}>Add Detail</h4></button>
             </div>
             </div>
+
+            
 
         
         

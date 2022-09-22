@@ -1,21 +1,46 @@
 
 import MainTab from "./filter";
-import React from "react";
+import React, { useEffect } from "react";
 
 
 function TollList() {
+
+
+    const [datas , setData] = React.useState([])
+    
+    useEffect(()=>{
+        let filteredData =JSON.parse(localStorage.getItem ('filteredItem') || " [ ] ")
+        if(filteredData === null){
+            localStorage.setItem ('filteredItem', JSON.stringify(vechileData))
+        }
+        if(filteredData.length > datas.length){
+            setData(filteredData)
+        }
+    },[])
+    
+
+    
+
+    
     
     let vechileData = JSON.parse(localStorage.getItem ( 'tollEntries' ) || " [ ] ")
     
-    localStorage.setItem('searchtoll' , " [ ] ")
+    //localStorage.setItem('searchtoll' , " [ ] ")
     let getTollData = JSON.parse(localStorage.getItem('filteredItem'))
     
     //console.log("Data ",getTollData.length)
 
     let getsearchData = JSON.parse(localStorage.getItem('searchtoll'))
     console.log("search  ",getsearchData)
-   
+
+
+    ///////////////////Testing
     
+    
+    
+
+    let tollfiltered = JSON.parse(localStorage.getItem ('newfiltered') || " [ ] ")
+
     const remove = (item)=>{
         let result = []
         for(let items of vechileData){
@@ -23,15 +48,15 @@ function TollList() {
                 result.push(items)
             }
         }
-
+        //console.log(result)
         localStorage.setItem('tollEntries', JSON.stringify(result))
-        localStorage.setItem('filteredItem', JSON.stringify(result))
+        localStorage.setItem('newfiltered', JSON.stringify(JSON.parse(localStorage.getItem('tollEntries'))))
         window.location.reload(false)
 
     }
 
     const nofound = ()=>{
-        if(getTollData.length === 0){
+        if(tollfiltered.length === 0){
             return(
                 <>
                     <h1 style={{
@@ -51,9 +76,34 @@ function TollList() {
     const filter =()=>{
 
         
-        
-        
-        if(getTollData === null  || getsearchData.length === 0){
+        if(tollfiltered !== null){
+            return(
+                <>
+                    {tollfiltered.map((item , index)=>{
+                        return(
+                        <tbody key={index}>
+                            <tr key={index}>
+                                <td >{item.tollDetail}</td>
+                                <td >{item.vehicle1.input1} / {item.vehicle1.input2}</td>
+                                <td >{item.vehicle2.input1} / {item.vehicle2.input2}</td>
+                                <td >{item.vehicle3.input1} / {item.vehicle3.input2}</td>
+                                <td >{item.vehicle4.input1} / {item.vehicle4.input2}</td>
+                                <td style={{
+                                    backgroundColor : "#0677EF",
+                                    textAlign : "center",
+                                    color : "whitesmoke",
+                                    cursor : "pointer",
+                                }} onClick={()=>{
+                                    remove(item.tollDetail)
+                                }}>Delete</td>
+                            </tr>
+                        </tbody>
+                            )
+                        })}
+                </>
+            )
+
+        }else if(getTollData === null  || getsearchData.length === 0){
             return(
                 <>
                     {vechileData.map((item , index)=>{
@@ -110,6 +160,8 @@ function TollList() {
                 </>
             )
         }
+        
+        
 
         
     }

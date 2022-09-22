@@ -1,5 +1,5 @@
 import "./../../style/filter.css"
-import React from "react";
+import React, { useEffect, useMemo , useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Main from "../main";
 
@@ -7,18 +7,54 @@ function AddToll() {
    
     const [addTollisActive, setTollisActive] = React.useState(false);
     const navigate = useNavigate()
+    const [vehicle , setVehicle] = React.useState([])
+
+    //for Toll Inputs Validation
+
+    const [tollName , settollDetail] = useState('')
+    const [vehicle1input , setVechicleinput1] = useState('')
+    const [vechicletypeinput2 , setVechicleinput2] = useState('')
+
+    const [vehicle2input , setVechicle2input1] = useState('')
+    const [vechicle2input2 , setVechicle2input2] = useState('')
+
+    const [vehicle3input , setVechicle3input1] = useState('')
+    const [vechicle3input2 , setVechicle3input2] = useState('')
+
+    const [vehicle4input , setVechicle4input1] = useState('')
+    const [vechicle4input2 , setVechicle4input2] = useState('')
     
     
     
     const vehicleList = ["Car/Jeep/Van","LCV","Truck/Bus","Heavy Vehicle"]
 
-    var x = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
+    //var x = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
 
-    console.log(x)
+    //console.log(vehicle)
 
     
     
-    
+    useMemo(()=>{
+        if(Number(vechicletypeinput2) > Number(vehicle1input)){
+            setVechicleinput2('')
+            alert("please Enter Correct input")
+        }
+
+        if(Number(vechicle2input2) > Number(vehicle2input)){
+            setVechicle2input2('')
+            alert("please Enter Correct input")
+        }
+
+        if(Number(vechicle3input2) > Number(vehicle3input)){
+            setVechicle3input2('')
+            alert("please Enter Correct input")
+        }
+
+        if(Number(vechicle4input2) > Number(vehicle4input)){
+            setVechicle4input2('')
+            alert("please Enter Correct input")
+        }
+    },[vechicletypeinput2,vechicle2input2,vechicle3input2,vechicle4input2])
     
 
     
@@ -29,13 +65,17 @@ function AddToll() {
     let vehicle1Detail3 = {}
     let vehicle1Detail4 = {}
 
+  
     
     
     const submit = ()=>{
-        tollDetail['vehicle1']= vehicle1Detail
-        tollDetail['vehicle2']= vehicle1Detail2
-        tollDetail['vehicle3']= vehicle1Detail3
-        tollDetail['vehicle4']= vehicle1Detail4
+
+        
+        tollDetail['tollDetail'] = tollName
+        tollDetail['vehicle1']= {input1 : vehicle1input , input2 : vechicletypeinput2 , vechicletype : vehicleList[0]}
+        tollDetail['vehicle2']= {input1 : vehicle2input , input2 : vechicle2input2 , vechicletype : vehicleList[1]}
+        tollDetail['vehicle3']= {input1 : vehicle3input , input2 : vechicle3input2 , vechicletype : vehicleList[2]}
+        tollDetail['vehicle4']= {input1 : vehicle4input , input2 : vechicle4input2 , vechicletype : vehicleList[3]}
         
 
         //for Vehicle Type : 
@@ -44,6 +84,12 @@ function AddToll() {
         vehicle1Detail2['vechicletype'] = vehicleList[1]
         vehicle1Detail3['vechicletype'] = vehicleList[2]
         vehicle1Detail4['vechicletype'] = vehicleList[3]
+        //for Vehicle Type : 
+
+        
+        
+
+        //console.log(tollDetail)
 
         if(addTollisActive === false){
             setTollisActive(true)
@@ -51,29 +97,36 @@ function AddToll() {
         else{
             setTollisActive(false)
         }
+        //console.log(tollDetail.tollDetail)
+        if(tollDetail.tollDetail=== ''){
+            alert('Please Enter Toll Name')
+        }
 
-        if(vehicle1Detail['input1'] === undefined || vehicle1Detail2['input1'] === undefined || vehicle1Detail3['input1'] === undefined || vehicle1Detail4['input1'] === undefined){
+        if(tollDetail['vehicle1'].input1 === '' || tollDetail['vehicle2'].input1 === '' || tollDetail['vehicle3'].input1 === '' || tollDetail['vehicle4'].input1 === ''){
             console.log('null')
             return(
                 alert("Single Input is Empty")
             )
-        }
-
-        if(vehicle1Detail['input2'] === undefined || vehicle1Detail2['input2'] === undefined || vehicle1Detail3['input2'] === undefined || vehicle1Detail4['input2'] === undefined){
+        }else if(tollDetail['vehicle1'].input2 === '' || tollDetail['vehicle2'].input2 === '' || tollDetail['vehicle3'].input2 === '' || tollDetail['vehicle4'].input2 === ''){
             console.log('null')
             return(
                 alert("Return Input is Empty")
             )
+        }else{
+            var Tolls = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
+            console.log(Tolls)
+            Tolls.push ( tollDetail )
+            localStorage.setItem ( 'tollEntries' , JSON.stringify ( Tolls ) )
+            localStorage.setItem('filteredItem', JSON.stringify(JSON.parse(localStorage.getItem(' vehicleEntries '))) )
+            alert("Success Added Toll")
+            setVehicle('')
+            navigate('/')
+            console.log('Saved')
         }
-        
-        var Tolls = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
-        console.log(Tolls)
-        Tolls.push ( tollDetail )
-        localStorage.setItem ( 'tollEntries' , JSON.stringify ( Tolls ) )
-        localStorage.setItem('filteredItem', JSON.stringify(JSON.parse(localStorage.getItem(' vehicleEntries '))) )
 
-        navigate('/')
-        console.log('Saved')
+        
+        
+            
 
 
 
@@ -85,7 +138,7 @@ function AddToll() {
          <Main/>
          {/* For Add Toll Dialog Box */}
          <div className="container" style={{
-            display : addTollisActive ? 'none' : 'inline-block',
+            // display : addTollisActive ? 'none' : 'inline-block',
          }}>
          <div>
                 <a href="/" title="Close" className="close" onClick={()=>{
@@ -105,12 +158,13 @@ function AddToll() {
                 }}
                 
                 onChange={(e)=>{
-                    tollDetail['tollDetail'] = e.target.value
+                    settollDetail(e.target.value)
+                    
                 }}
 
                  type={'text'} />
 
-                <h4> Vechicle fare details </h4>
+                <h4> Vehicle fare details </h4>
 
                 <div className="vehicleDropdown">
                     <select
@@ -130,13 +184,19 @@ function AddToll() {
 
                     </select>
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail['input1']=e.target.value
-                    }} placeholder="Single Journey" type={"text"} />
+                    <input value={vehicle1input} onChange={(e)=>{
+                        setVechicleinput1(e.target.value)
+                        //vehicle1Detail['input1'] = e.target.value
+                        
+                        
+                        
+                    }} placeholder="Single Journey" type={'number'} />
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail['input2']=e.target.value
-                    }} placeholder="Return Journey" type={"text"} />
+                    <input value={vechicletypeinput2} onChange={(e)=>{
+                        setVechicleinput2(e.target.value)
+                        //setVehicle(e.target.value)
+                        //vehicle1Detail['input2']= e.target.value
+                    }} placeholder="Return Journey" type={'number'} />
                 </div>
 {/* Second vehicle start here----------------------------------------------------------------------------------------*/}
                 <div className="vehicleDropdown">
@@ -152,13 +212,13 @@ function AddToll() {
 
                     </select>
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail2['input1'] = e.target.value
-                    }} placeholder="Single Journey" type={"text"} />
+                    <input value={vehicle2input} type={'number'} onChange={(e)=>{
+                        setVechicle2input1(e.target.value)
+                    }} placeholder="Single Journey"  />
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail2['input2'] = e.target.value
-                    }} placeholder="Return Journey" type={"text"} />
+                    <input value={vechicle2input2} onChange={(e)=>{
+                        setVechicle2input2(e.target.value)
+                    }} placeholder="Return Journey" type={'number'} />
                 </div>
 {/* Third vehicle start here----------------------------------------------------------------------------------------*/}
                 <div className="vehicleDropdown">
@@ -175,13 +235,13 @@ function AddToll() {
 
                     </select>
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail3['input1'] = e.target.value
-                    }} placeholder="Single Journey" type={"text"} />
+                    <input  value={vehicle3input} onChange={(e)=>{
+                        setVechicle3input1(e.target.value)
+                    }} placeholder="Single Journey" type={'number'} />
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail3['input2'] = e.target.value
-                    }} placeholder="Return Journey" type={"text"} />
+                    <input value={vechicle3input2} onChange={(e)=>{
+                        setVechicle3input2(e.target.value)
+                    }} placeholder="Return Journey" type={'number'} />
                 </div>
 {/* Fourth vehicle start here----------------------------------------------------------------------------------------*/}
                 <div className="vehicleDropdown">
@@ -198,13 +258,14 @@ function AddToll() {
 
                     </select>
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail4['input1'] = e.target.value
-                    }} placeholder="Single Journey" type={"text"} />
+                    <input value={vehicle4input} onChange={(e)=>{
+                        setVechicle4input1(e.target.value)
+                    }} placeholder="Single Journey" type={'number'} />
 
-                    <input onChange={(e)=>{
-                        vehicle1Detail4['input2'] = e.target.value
-                    }} placeholder="Return Journey" type={"text"} />
+                    <input value={vechicle4input2} onChange={(e)=>{
+                        setVechicle4input2(e.target.value)
+                        //vehicle1Detail4['input2'] = e.target.value
+                    }} placeholder="Return Journey" type={'number'} />
                 </div>
 
                 <button style={{

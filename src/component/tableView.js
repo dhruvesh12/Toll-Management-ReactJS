@@ -1,19 +1,43 @@
 import "./../style/filter.css"
-import React from "react";
+import React, { useEffect } from "react";
 
 
 function TableTab() {
     
     let vechileData = JSON.parse(localStorage.getItem ( ' vehicleEntries ' ) || " [ ] ")
+    
+    const [datas , setData] = React.useState([])
+    
 
-    let filteredData =JSON.parse(localStorage.getItem ('filteredItem')  || " [ ] ")
-    //console.log(filteredData)
+    let filteredData =JSON.parse(localStorage.getItem ('filteredItem') || " [ ] ")
+
+    let tablebooleon = JSON.parse(localStorage.getItem ('Booleon') || " [ ] ")
+
+    
+    if(tablebooleon === true){
+        localStorage.setItem ('filteredItem' , JSON.stringify(vechileData))
+        console.log("This is running")
+    }
+    
+    
+
+    
+
+    
+
+    if(filteredData === null){
+        localStorage.setItem ('filteredItem', JSON.stringify(vechileData))
+    }
+    if(filteredData.length > datas.length){
+        setData(filteredData)
+    }
+    
     const data = ()=>{
 
         
 
-        if(filteredData === undefined || filteredData === null || filteredData){
-              
+        if(filteredData === undefined || filteredData === null){
+            
             return(
                 <>
                     {vechileData.map((item,index)=>{
@@ -32,7 +56,7 @@ function TableTab() {
                 </>
             )
         }else {
-            console.log('running')
+            
             return(
                 <>
                     {filteredData.map((item,index)=>{
@@ -58,7 +82,9 @@ function TableTab() {
 
     return ( 
         <>
-        <table className="customers">
+        <table style={{
+            display : tablebooleon ? '' : 'none',
+        }} className="customers">
             <thead>
             <tr>
                 <th>Vehicle Type</th>

@@ -1,22 +1,35 @@
 
 //import "./../style/filter.css"
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import {useNavigate } from "react-router-dom";
+import TableTab from "./tableView";
+import TollList from "./tollList";
 
 
 function MainTab() {
     const [isActive, setIsActive] = React.useState(false);
+    const [searchval , setSearchVal] = React.useState('');
+    const [tollsearch , setTollSearch] = React.useState('')
+    //const [tablebooleon , settablebooleon] = React.useState(true)
+    let viewTolls = JSON.parse(localStorage.getItem('Booleon'))
+    const [booleon , setbooleon] = React.useState(viewTolls)
 
     const navigate = useNavigate()
     
-
+    //console.log(isActive)
+    useEffect(()=>{
+        
+    })
     var tollData = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
     
-
+    let tablebooleon = JSON.parse(localStorage.getItem ('Booleon') || " [ ] ")
     
+    //var tablebooleon = JSON.parse(localStorage.getItem( 'booleonForTable' ) || " [ ] " )
     
-    
+    if(JSON.parse(localStorage.getItem ('Booleon') || " [ ] ") === true){
+        localStorage.setItem('newfiltered', JSON.stringify(JSON.parse(localStorage.getItem ( 'tollEntries' ))))
+    }
     
     let vehicleDetail = []
     const filtertolldropdown = (e)=>{
@@ -28,8 +41,11 @@ function MainTab() {
 
             }
             localStorage.setItem ( 'filteredItem' , JSON.stringify ( vehicleDetail ) )
+            //window.location.reload(false)
+        }else{
+            localStorage.setItem ( 'filteredItem' , JSON.stringify ( entrties ) )
         }
-        console.log(JSON.parse(localStorage.getItem('filteredItem')))
+        
         for(let i of entrties){
             
             if(i.tollName === e){
@@ -40,44 +56,55 @@ function MainTab() {
         localStorage.setItem ( 'filteredItem' , JSON.stringify ( vehicleDetail ) )
 
         
-        window.location.reload(false);
+        // window.location.reload(false);
     }
 
-    let searchedfilter = []
-    
-    const filterBySearch= (e)=>{
-        //For Toll Search In Toll Gate
-        
-        
-        
-        if(JSON.parse ( localStorage.getItem ( 'Booleon' ) || " [ ] " )=== false){
-            let getTollName = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
-            
-            console.log(JSON.parse(localStorage.getItem('searchtoll')))
-            const filteredData = getTollName.filter((item) => String(item.tollDetail).toLowerCase().includes(String(JSON.parse(localStorage.getItem('searchtoll'))).toLowerCase()))
-            setTimeout(window.location.reload(false),2000)
-            
-            localStorage.setItem('filteredItem',JSON.stringify(filteredData))
-            
-            
 
-        }else{
-            //For Vehicle  Search In Main Page
+   
+    const handleinput1 = (e)=>{
+        setSearchVal(e)
+    }
+
+    const handleinput2 = (e)=>{
+        setTollSearch(e)
+
+    }
+/////////FOR VEHICLE SEARCH BAR
+    useMemo(()=>{
+        //console.log(searchval)
+        
+        if (searchval.length > 0){
             let entrties = JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ) || " [ ] " )
-            for(let item of entrties){
-                if(item.vehicleNo === e){
-                    searchedfilter.push(item)
-                    setTimeout(window.location.reload(false),2000)
-                    
 
-                }
-            }
-            localStorage.setItem('filteredItem',JSON.stringify(searchedfilter))
+            const filteredData = entrties.filter((item) => String(item.vehicleNo).toLowerCase().includes(String(searchval).toLowerCase()))
+           
+            localStorage.setItem('filteredItem',JSON.stringify(filteredData))
+
+        }else if(searchval.length === 0){
+            var entrties = JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ) || " [ ] " )
+            localStorage.setItem('filteredItem',JSON.stringify(entrties))
         }
         
-        
-        
-    }
+    },[searchval])
+    
+
+    useMemo(()=>{
+        if (tollsearch.length > 0){
+            let entrties = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
+
+            const filteredData = entrties.filter((item) => String(item.tollDetail).toLowerCase().includes(String(tollsearch).toLowerCase()))
+            //console.log(filteredData)
+            localStorage.setItem('newfiltered',JSON.stringify(filteredData))
+            localStorage.setItem('searchtoll',JSON.stringify(tollsearch))
+            setTimeout(()=>{
+                window.location.reload(false);
+            },[2000])
+
+        }else if(tollsearch.length === 0){
+            var entrties = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
+            localStorage.setItem('filteredItem',JSON.stringify(entrties))
+        }
+        },[tollsearch])
 
     
     
@@ -85,8 +112,7 @@ function MainTab() {
 
     
 
-    let viewTolls = JSON.parse(localStorage.getItem('Booleon'))
-    const [booleon , setbooleon] = React.useState(viewTolls)
+    
     
     useMemo(()=>{
         localStorage.setItem ( 'Booleon' , true )
@@ -104,6 +130,8 @@ function MainTab() {
     
 
     return ( <>
+
+    
         <h4 style={{
             display : "flex",
             marginLeft : "50px"
@@ -144,7 +172,7 @@ function MainTab() {
                             }}
                  key={'name'}
                 onClick={(e)=>{
-                    
+                    setIsActive(false)
                     filtertolldropdown(e.target.innerHTML)
                 }}>All</li>
 
@@ -179,7 +207,8 @@ function MainTab() {
             }} 
 
             onChange={(e)=>{
-                filterBySearch(e.target.value)
+                handleinput1(e.target.value)
+                
             }}
 
             placeholder="&#xF002; Search Vehicle" />
@@ -201,10 +230,9 @@ function MainTab() {
                 
                 
             }} 
-            value = {JSON.parse(localStorage.getItem('searchtoll'))}
+            value = {tollsearch}
             onChange={(e)=>{
-                filterBySearch()
-                localStorage.setItem('searchtoll',JSON.stringify(e.target.value))
+                handleinput2(e.target.value)
             }}
 
             placeholder="&#xF002; Search Toll"
@@ -252,6 +280,9 @@ function MainTab() {
                     
                     setbooleon(false)
                 }
+
+                //localStorage.setItem('booleonForTable', false)
+
                 localStorage.setItem('filteredItem','')
                 var entrties = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
         
@@ -260,7 +291,8 @@ function MainTab() {
                 localStorage.setItem ( 'filteredItem' , JSON.stringify ( entrties ) )
                 
             }}
-            >View Tolls</button> : <button 
+            >View Tolls</button> : 
+            <button 
             onClick={()=>{
                 if(booleon === false){
                     
@@ -269,6 +301,7 @@ function MainTab() {
                     
                     setbooleon(false)
                 }
+                //localStorage.setItem('booleonForTable', )
                 localStorage.setItem('filteredItem','')
                 var entrties = JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ) || " [ ] " )
         
@@ -288,8 +321,9 @@ function MainTab() {
         <div>
 
         </div>
+        {/* {JSON.parse(localStorage.getItem('Booleon')) ? <TableTab/> : <TollList/>} */}
         
-        
+        <TableTab/>
 
         
     </> );
