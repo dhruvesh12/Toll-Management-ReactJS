@@ -165,6 +165,21 @@ input:placeholder-shown {
     border-radius: 5px;
   }
 
-  
+  .btnstatus{
+    margin-left: 100px;
+    color: white;
+    width : 500px;
+    height : 40px;
+    background-color: #3375E6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-  
+  button:disabled,
+  button[disabled]{
+    border: 1px solid #999999;
+    background-color: gray;
+    color: #000000;
+    font-size: large;
+  }

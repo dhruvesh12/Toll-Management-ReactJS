@@ -11,9 +11,24 @@ function MainTab() {
     const [isActive, setIsActive] = React.useState(false);
     const [searchval , setSearchVal] = React.useState('');
     const [tollsearch , setTollSearch] = React.useState('')
-    //const [tablebooleon , settablebooleon] = React.useState(true)
+    
     let viewTolls = JSON.parse(localStorage.getItem('Booleon'))
     const [booleon , setbooleon] = React.useState(viewTolls)
+
+    //status for Btn
+
+    const [viewTollstatus , setviewTollstatus] = React.useState(true)
+
+
+    useMemo(()=>{
+        var toll = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [] " )
+        if(toll[0]===undefined){
+            setviewTollstatus(true)
+        }else{
+            setviewTollstatus(false)
+        }
+        
+    },[viewTollstatus])
 
     const navigate = useNavigate()
     
@@ -71,13 +86,13 @@ function MainTab() {
     }
 /////////FOR VEHICLE SEARCH BAR
     useMemo(()=>{
-        //console.log(searchval)
+        
         
         if (searchval.length > 0){
             let entrties = JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ) || " [ ] " )
-
+            
             const filteredData = entrties.filter((item) => String(item.vehicleNo).toLowerCase().includes(String(searchval).toLowerCase()))
-           
+            //console.log(filteredData)
             localStorage.setItem('filteredItem',JSON.stringify(filteredData))
 
         }else if(searchval.length === 0){
@@ -252,18 +267,20 @@ function MainTab() {
             <button onClick={()=>{
                     localStorage.setItem('filteredItem',JSON.stringify(null))
                     setbooleon(true)
-                    //navigate('/addentry')
+                    navigate('/addentry')
                 }}
+
+                style={{
+                    cursor : "pointer",
+                }}
+                disabled={viewTollstatus}
                 >
-                <a style={{
-                    color : "white",
-                    textDecoration: "none", 
-                }} href="/addentry">Add Vehicle Entry</a>
+                Add Vehicle Entry
             </button>
                 <button onClick={()=>{
                     localStorage.setItem('filteredItem',JSON.stringify(JSON.parse(localStorage.getItem(' vehicleEntries '))))
                     setbooleon(true)
-                    //navigate('/addtoll')
+                    navigate('/addtoll')
                 }}>
                 <a style={{
                     color : "white",
@@ -291,6 +308,12 @@ function MainTab() {
                 localStorage.setItem ( 'filteredItem' , JSON.stringify ( entrties ) )
                 
             }}
+
+            style={{
+                    cursor : "pointer",
+                }}
+            disabled={viewTollstatus}
+
             >View Tolls</button> : 
             <button 
             onClick={()=>{

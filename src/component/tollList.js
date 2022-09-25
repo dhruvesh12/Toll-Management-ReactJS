@@ -1,11 +1,12 @@
 
 import MainTab from "./filter";
 import React, { useEffect } from "react";
+import {useNavigate } from "react-router-dom";
 
 
 function TollList() {
 
-
+    const navigate = useNavigate()
     const [datas , setData] = React.useState([])
     
     useEffect(()=>{
@@ -18,7 +19,10 @@ function TollList() {
         }
     },[])
     
-
+    var toll = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [] " )
+    if(toll[0]===undefined){
+        navigate('/')
+    }
     
 
     

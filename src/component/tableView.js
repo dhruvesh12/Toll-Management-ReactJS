@@ -16,7 +16,7 @@ function TableTab() {
     
     if(tablebooleon === true){
         localStorage.setItem ('filteredItem' , JSON.stringify(vechileData))
-        console.log("This is running")
+        //console.log("This is running")
     }
     
     
@@ -36,8 +36,8 @@ function TableTab() {
 
         
 
-        if(filteredData === undefined || filteredData === null){
-            
+        if(filteredData[0] === undefined || filteredData === null){
+            console.log("running1")
             return(
                 <>
                     {vechileData.map((item,index)=>{
@@ -55,8 +55,10 @@ function TableTab() {
                 })}
                 </>
             )
-        }else {
-            
+        }else if(filteredData){
+
+            //console.log("running2")
+            //let data = JSON.parse(localStorage.getItem ('filteredItem') || '[]')
             return(
                 <>
                     {filteredData.map((item,index)=>{

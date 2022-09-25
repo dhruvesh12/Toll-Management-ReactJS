@@ -8,6 +8,7 @@ function AddToll() {
     const [addTollisActive, setTollisActive] = React.useState(false);
     const navigate = useNavigate()
     const [vehicle , setVehicle] = React.useState([])
+    const [btnactive , setbtnactive] = React.useState(true)
 
     //for Toll Inputs Validation
 
@@ -35,26 +36,48 @@ function AddToll() {
     
     
     useMemo(()=>{
-        if(Number(vechicletypeinput2) > Number(vehicle1input)){
-            setVechicleinput2('')
-            alert("please Enter Correct input")
+        
+        if(vechicletypeinput2 !== ''){
+            if(Number(vechicletypeinput2) >= Number(vehicle1input)){
+                setVechicleinput2('')
+                alert("please Enter Correct input")
+            }
+
+            
         }
 
-        if(Number(vechicle2input2) > Number(vehicle2input)){
-            setVechicle2input2('')
-            alert("please Enter Correct input")
+        if(vechicle2input2 !== ''){
+            if(Number(vechicle2input2) >= Number(vehicle2input)){
+                setVechicle2input2('')
+                alert("please Enter Correct input")
+            }
+
         }
 
-        if(Number(vechicle3input2) > Number(vehicle3input)){
-            setVechicle3input2('')
-            alert("please Enter Correct input")
+        if(vechicle3input2 !== ''){
+
+            if(Number(vechicle3input2) >= Number(vehicle3input)){
+                setVechicle3input2('')
+                alert("please Enter Correct input")
+            }
+
         }
 
-        if(Number(vechicle4input2) > Number(vehicle4input)){
-            setVechicle4input2('')
-            alert("please Enter Correct input")
+        if(vechicle4input2 !== ''){
+            if(Number(vechicle4input2) >= Number(vehicle4input)){
+                setVechicle4input2('')
+                alert("please Enter Correct input")
+            }
         }
-    },[vechicletypeinput2,vechicle2input2,vechicle3input2,vechicle4input2])
+
+        if(vehicle1input !== '' && vechicletypeinput2 !== '' && vehicle2input !== '' && vechicle2input2 !== '' &&
+        vehicle3input !== '' && vechicle3input2 !== '' && vehicle4input !== '' && vechicle4input2 !== '' && tollName !== ''){
+
+            setbtnactive(false)
+
+        }
+        
+    },[vechicletypeinput2,vechicle2input2,vechicle3input2,vechicle4input2 ,tollName])
     
 
     
@@ -97,12 +120,10 @@ function AddToll() {
         else{
             setTollisActive(false)
         }
-        //console.log(tollDetail.tollDetail)
+        console.log(tollDetail.tollDetail)
         if(tollDetail.tollDetail=== ''){
             alert('Please Enter Toll Name')
-        }
-
-        if(tollDetail['vehicle1'].input1 === '' || tollDetail['vehicle2'].input1 === '' || tollDetail['vehicle3'].input1 === '' || tollDetail['vehicle4'].input1 === ''){
+        }else if(tollDetail['vehicle1'].input1 === '' || tollDetail['vehicle2'].input1 === '' || tollDetail['vehicle3'].input1 === '' || tollDetail['vehicle4'].input1 === ''){
             console.log('null')
             return(
                 alert("Single Input is Empty")
@@ -123,6 +144,8 @@ function AddToll() {
             navigate('/')
             console.log('Saved')
         }
+
+        
 
         
         
@@ -268,17 +291,12 @@ function AddToll() {
                     }} placeholder="Return Journey" type={'number'} />
                 </div>
 
-                <button style={{
-                    
-                    marginLeft : "100px",
-                    color : "white",
-                    width : "500px",
-                    height : "40px",
-                    backgroundColor : "#3375E6",
-                    border : "none",
-                    borderRadius : "5px",
-                }}
-                onClick={submit} >Add Detail</button>
+                <button className="btnstatus" 
+                onClick={submit} 
+                
+                disabled={btnactive}
+                
+                >Add Detail</button>
             </div>
             </div>
         {/* For Add Toll Dialog Box End Here !!!!!!! */}

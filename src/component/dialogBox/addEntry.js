@@ -12,15 +12,27 @@ function AddEntry() {
     
     const [toll ,setToll] = React.useState('')
     const [vehicletype , setvehicletype] = React.useState('')
-    const [vehicleNo , setVehicleNo] = React.useState()
+    const [vehicleNo , setVehicleNo] = React.useState('')
     const [tarif , settarif] = React.useState('')
    
     const [vehiclevalidate , setvehiclevalidate] = React.useState(true)
+
+    const [viewEntrystatus , setviewEntrystatus] = React.useState(true)
     
     let getTollName = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
 
     
-    
+    ////////////////////////Add Buttton Validation
+
+    useMemo(()=>{
+        console.log('Toll:-',toll)
+        console.log('vehicletype:-',vehicletype)
+        console.log('vehicleNo:-',vehicleNo)
+        console.log('tarif:-',tarif)
+        if(toll !== '' && vehicletype !=='' && vehicleNo !=='' && tarif !== ''){
+            setviewEntrystatus(false)
+        }
+    },[toll , vehicletype , vehicleNo ,tarif])
     
     
 
@@ -29,7 +41,7 @@ function AddEntry() {
 
     let vehicletoll={}
 
-    console.log(toll==='')
+    //console.log(toll==='')
 
     useMemo(()=>{
         let currentTime = new Date()
@@ -37,12 +49,14 @@ function AddEntry() {
 
         
         //To validate Vehicle No.
+        if(vehicleNo !== ''){
+            var RegEx = /^[a-z0-9]+$/i;
+            var Valid = RegEx.test(vehicleNo);
+            setvehiclevalidate(Valid)
+        }
+        
 
-        var RegEx = /^[a-z0-9]+$/i;
-        var Valid = RegEx.test(vehicleNo);
-        setvehiclevalidate(Valid)
-
-        //console.log(vehiclevalidate)
+        
 
         if(Valid === false){
             var result = String(vehicleNo).slice(0,-1);
@@ -53,8 +67,8 @@ function AddEntry() {
         if(JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ))=== null){
             for(let item of getTollName){
                 if(toll === item.tollDetail){
-                    console.log(toll)
-                    if(item.vehicle1.vechicletype === vehicletype){
+                    console.log(toll ,item.tollDetail )
+                    if(item.vehicle1.vechicletype === vehicletype ){
                         settarif(item.vehicle1.input1)
                         
                         
@@ -82,7 +96,7 @@ function AddEntry() {
         for(let i of JSON.parse ( localStorage.getItem ( ' vehicleEntries ' ) || " [ ] ")){
 
             if(i.vehicleNo === vehicleNo){
-                console.log(typeof(vehicleNo))
+            
                 test=i.time
 
                 var diff = currentTime.valueOf() - (new Date(test)).valueOf();
@@ -91,8 +105,8 @@ function AddEntry() {
                 for(let item of getTollName){
                     if(toll === item.tollDetail){
                         console.log(toll)
-                        if(item.vehicle1.vechicletype === vehicletype){
-                            console.log('running 1st')
+                        if(item.vehicle1.vechicletype === vehicletype ){
+                            
                             if(result < 1){
                                 
                                 settarif(item.vehicle1.input2)
@@ -101,7 +115,7 @@ function AddEntry() {
                             
                         }
                         if(item.vehicle2.vechicletype === vehicletype){
-                            console.log('running 2nd')
+                            
                             if(result < 1){
                                 console.log(result)
                                 settarif(item.vehicle2.input2)
@@ -109,7 +123,7 @@ function AddEntry() {
                             
                         }
                         if(item.vehicle3.vechicletype === vehicletype){
-                            console.log('running 3d')
+                            
                             if(result < 1){
                                 console.log('running')
                                 settarif(item.vehicle3.input2)
@@ -117,7 +131,7 @@ function AddEntry() {
                             
                         }
                         if(item.vehicle4.vechicletype === vehicletype){
-                            console.log('running 4td')
+                            
                             if(result < 1){
                                 console.log('running')
                                 settarif(item.vehicle4.input2)
@@ -167,9 +181,11 @@ function AddEntry() {
    
         
         }
+
+        
        
         
-    },[vehicleNo])
+    },[vehicleNo, toll , vehicletype])
 
     let vehicleDetail = {}
     
@@ -337,7 +353,7 @@ function AddEntry() {
                 }}
 
                 onClick={submit}
-
+                disabled={viewEntrystatus}
                 className="Btndesign"
                  ><h4 style={{
                     textAlign : "center",
