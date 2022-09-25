@@ -251,7 +251,7 @@ function MainTab() {
             }}
 
             placeholder="&#xF002; Search Toll"
-            ref={(element) => element?.focus?.()}
+            // ref={(element) => element?.focus?.()}
              />
 
             
@@ -282,10 +282,7 @@ function MainTab() {
                     setbooleon(true)
                     navigate('/addtoll')
                 }}>
-                <a style={{
-                    color : "white",
-                    textDecoration: "none", 
-                }} href="/addtoll">Add Toll</a>
+                Add Toll
             </button>
 
 

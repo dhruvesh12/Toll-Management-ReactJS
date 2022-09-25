@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Main from "../main";
 import TableTab from "../tableView";
+import TollList from "../tollList";
 
 function AddEntry() {
 
@@ -37,7 +38,7 @@ function AddEntry() {
     
 
     const vehicleList = ["Car/Jeep/Van","LCV","Truck/Bus","Heavy Vehicle"]
-    
+    var status = JSON.parse ( localStorage.getItem ( 'Booleon' ) || " [ ] " )
 
     let vehicletoll={}
 
@@ -220,7 +221,7 @@ function AddEntry() {
     
 
     return ( <>
-        <Main/>
+        {status ? <Main/> : <TollList/>}
         
         <div className="container" style={{
             // display : addTollisActive ? 'none' : 'inline-block',
@@ -230,10 +231,32 @@ function AddEntry() {
             width : "450px",
             height : "600px",
          }}>
-                <a href="/" title="Close" className="close" onClick={()=>{
-                    // navigate('/')
+                <h4  title="Close" className="close" onClick={()=>{
+                    if(status=== true){
+                        navigate('/')
+                    }else{
+                        navigate('/tolllist')
+                    }
+                    
 
-                }}>X</a> 
+                }}>X</h4> 
+
+                {/* {()=>{
+                    if(status===true){
+                        <a href="/" title="Close" className="close" onClick={()=>{
+
+                            navigate('/')
+
+                        }}>X</a> 
+                    }else{
+                        <a href="/" title="Close" className="close" onClick={()=>{
+
+                        navigate('/')
+
+                        }}>X</a> 
+                    }
+                }} */}
+
                 <h2 style={{
                     textAlign : "Center"
                 }}>Add Vehicle Entry</h2>

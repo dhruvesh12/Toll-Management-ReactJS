@@ -2,6 +2,7 @@ import "./../../style/filter.css"
 import React, { useEffect, useMemo , useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Main from "../main";
+import TollList from "../tollList";
 
 function AddToll() {
    
@@ -29,7 +30,7 @@ function AddToll() {
     
     const vehicleList = ["Car/Jeep/Van","LCV","Truck/Bus","Heavy Vehicle"]
 
-    //var x = JSON.parse ( localStorage.getItem ( 'tollEntries' ) || " [ ] " )
+    var status = JSON.parse ( localStorage.getItem ( 'Booleon' ) || " [ ] " )
 
     //console.log(vehicle)
 
@@ -158,16 +159,20 @@ function AddToll() {
 
 
     return ( <>
-         <Main/>
+         {status ? <Main/> : <TollList/>}
          {/* For Add Toll Dialog Box */}
          <div className="container" style={{
             // display : addTollisActive ? 'none' : 'inline-block',
          }}>
          <div>
-                <a href="/" title="Close" className="close" onClick={()=>{
-                    navigate('/')
+                <h4 className="close" onClick={()=>{
+                    if(status===false){
+                        navigate('/tolllist')
+                    }else{
+                        navigate('/')
+                    }
 
-                }}>X</a> 
+                }}>X</h4> 
                 <h2 style={{
                     textAlign : "Center"
                 }}>Add New Toll</h2>
